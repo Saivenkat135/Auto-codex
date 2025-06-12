@@ -1,4 +1,4 @@
-# Codex.dev 🧠💻
+# AutoCodex 🧠💻
 
 **Codex** is a powerful AI-driven platform that builds modern websites using nothing but your prompts. Whether you're a developer, designer, or entrepreneur, Codex helps you generate full-stack Next.js + Tailwind CSS projects in seconds.
 
