@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex API</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: linear-gradient(135deg, #000000 0%, #0f0f23 50%, #1a1a2e 100%);
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Animated background particles */
+      .bg-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(10, 217, 217, 0.6);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .particle:nth-child(odd) {
+        background: rgba(86, 255, 255, 0.4);
+        animation-duration: 8s;
+        animation-delay: -2s;
+      }
+
+      .particle:nth-child(3n) {
+        background: rgba(0, 255, 255, 0.3);
+        animation-duration: 10s;
+        animation-delay: -4s;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(-100px) rotate(180deg);
+        }
+      }
+
+      /* Glowing grid overlay */
+      .grid-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+          linear-gradient(rgba(10, 217, 217, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10, 217, 217, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        animation: grid-pulse 4s ease-in-out infinite;
+        z-index: 2;
+      }
+
+      @keyframes grid-pulse {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.1;
+        }
+      }
+
+      /* Main content container */
+      .content-container {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(10, 217, 217, 0.2);
+        box-shadow: 
+          0 0 50px rgba(10, 217, 217, 0.1),
+          inset 0 0 50px rgba(0, 0, 0, 0.2);
+        animation: container-glow 3s ease-in-out infinite alternate;
+      }
+
+      @keyframes container-glow {
+        from {
+          box-shadow: 
+            0 0 50px rgba(10, 217, 217, 0.1),
+            inset 0 0 50px rgba(0, 0, 0, 0.2);
+        }
+        to {
+          box-shadow: 
+            0 0 80px rgba(10, 217, 217, 0.2),
+            inset 0 0 50px rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      /* Enhanced heading styles */
+      #main-heading {
+        font-family: "Titillium Web", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        font-size: clamp(3rem, 8vw, 6rem);
+        background: linear-gradient(45deg, #0ad9d9, #56ffff, #00ffff, #0ad9d9);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient-shift 3s ease-in-out infinite, text-glow 2s ease-in-out infinite alternate;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 30px rgba(10, 217, 217, 0.5);
+        position: relative;
+      }
+
+      @keyframes gradient-shift {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      @keyframes text-glow {
+        from {
+          filter: drop-shadow(0 0 10px rgba(10, 217, 217, 0.6));
+        }
+        to {
+          filter: drop-shadow(0 0 20px rgba(10, 217, 217, 0.9));
+        }
+      }
+
+      /* Status indicator */
+      .status-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .status-dot {
+        width: 12px;
+        height: 12px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+        box-shadow: 0 0 15px #00ff00;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.7;
+        }
+      }
+
+      #para {
+        font-family: "Titillium Web", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        color: #56ffff;
+        font-size: clamp(1.2rem, 4vw, 2rem);
+        text-shadow: 0 0 15px rgba(86, 255, 255, 0.4);
+        animation: text-shimmer 4s ease-in-out infinite;
+        margin: 0;
+      }
+
+      @keyframes text-shimmer {
+        0%, 100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* Hover effects */
+      .content-container:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+      }
+
+      .content-container:hover #main-heading {
+        animation-duration: 1.5s;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .content-container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+        
+        .particle {
+          display: none;
+        }
+      }
+
+      /* Additional cyber elements */
+      .cyber-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #0ad9d9, transparent);
+        animation: scan 3s linear infinite;
+      }
+
+      .cyber-line:nth-child(1) {
+        top: 20%;
+        left: 0;
+        right: 0;
+        animation-delay: 0s;
+      }
+
+      .cyber-line:nth-child(2) {
+        top: 60%;
+        left: 0;
+        right: 0;
+        animation-delay: 1s;
+      }
+
+      .cyber-line:nth-child(3) {
+        top: 80%;
+        left: 0;
+        right: 0;
+        animation-delay: 2s;
+      }
+
+      @keyframes scan {
+        0% {
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background animations -->
+    <div class="bg-animation">
+      <!-- Particles will be generated by JavaScript -->
+    </div>
+    
+    <!-- Grid overlay -->
+    <div class="grid-overlay"></div>
+    
+    <!-- Scanning lines -->
+    <div class="cyber-line"></div>
+    <div class="cyber-line"></div>
+    <div class="cyber-line"></div>
+    
+    <!-- Main content -->
+    <div class="content-container">
+      <h1 id="main-heading">CODEX API</h1>
+      <div class="status-container">
+        <div class="status-dot"></div>
+        <p id="para">Server is running and live!</p>
+      </div>
+    </div>
+
+    <script>
+      // Generate floating particles
+      function createParticles() {
+        const container = document.querySelector('.bg-animation');
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          particle.style.animationDelay = Math.random() * 6 + 's';
+          container.appendChild(particle);
+        }
+      }
+      
+      // Initialize particles when page loads
+      document.addEventListener('DOMContentLoaded', createParticles);
+      
+      // Add interactive glow effect on mouse move
+      document.addEventListener('mousemove', (e) => {
+        const container = document.querySelector('.content-container');
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        container.style.background = `
+          radial-gradient(circle at ${x}px ${y}px, 
+          rgba(10, 217, 217, 0.1) 0%, 
+          rgba(0, 0, 0, 0.3) 70%)
+        `;
+      });
+    </script>
+  </body>
+</html>

@@ -97,6 +97,15 @@ app.post("/chat", async (req, res) => {
     }
 });
 
+app.get(["/", "/api"], (req, res) => {
+  try {
+    res.sendFile(__dirname + "/index.html");
+  } catch (e) {
+    console.log("erorrrrr", e);
+  }
+});
+
+
 app.listen(3000, () => {
     console.log("Server running on port 3000");
 });
