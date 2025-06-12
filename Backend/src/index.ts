@@ -105,6 +105,14 @@ app.get(["/", "/api"], (req, res) => {
   }
 });
 
+app.use(
+  cors({
+    origin: "https://autocodex.vercel.app",
+    methods: ["GET", "POST"],
+    credentials: true
+  })
+);
+
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");
